@@ -72,7 +72,7 @@ section > h1, section > p {
 	flex-basis: 100%;
 }
 
-.content {
+#points, #last-sip {
 	font-size: 200%;
 }
 

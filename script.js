@@ -1,17 +1,23 @@
 "use strict";
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'
-import { getFirestore, collection, getDocs, onSnapshot, doc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js'
+import { getFirestore, collection, getDocs, onSnapshot, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js'
 
-const userId = "martin";
+let userId = "martin";
+
+const dashboard = document.getElementById("dashboard");
+const login = document.getElementById("login");
 
 const name1 = document.getElementById("name1");
 const name2 = document.getElementById("name2");
-const points = document.getElementById("points");
-const lastSip = document.getElementById("last-sip");
+const pointsDash = document.getElementById("points");
+const lastSipDash = document.getElementById("lastsip");
 const leaderboard = document.getElementById("leaderboard-body");
 
 function getTimestampString(timestamp) {
+	if (timestamp === null) {
+		return "None";
+	}
 	const seconds = Math.floor(Date.now() / 1000) - timestamp;
 	if (seconds >= 2 * 24 * 3600) {
 		return `${Math.floor(seconds / (24 * 3600))} days ago`;
@@ -37,47 +43,87 @@ const app = initializeApp({
 });
 
 const db = getFirestore(app);
-const unsub = await onSnapshot(collection(db, "users"), (querySnapshot) => {
-	querySnapshot.forEach((doc) => {
-		const data = doc.data();
-		console.log(doc.id, data);
-		if (doc.id === userId) {
-			// For the logged in user, instead of adding to leaderboard, update dashboard
-			name1.textContent = data["name"];
-			name2.textContent = data["name"];
-			points.textContent = data["points"];
-			const timestamp = data["last-sip"];
-			lastSip.textContent = getTimestampString(timestamp);
-			if (lastSip.className !== "") {
-				clearInterval(parseInt(lastSip.className, 10));
+
+async function loadData() {
+	const userRef = doc(db, "users", userId);
+	const userSnap = await getDoc(userRef);
+	if (!userSnap.exists()) {
+		await setDoc(userRef, {
+			name: userId[0].toUpperCase() + userId.slice(1),
+			points: 0,
+			lastsip: null,
+		});
+	}
+	const unsub = await onSnapshot(collection(db, "users"), (querySnapshot) => {
+		for (let i = leaderboard.children.length - 1; i >= 0; i--) {
+			leaderboard.removeChild(leaderboard.children[i]);
+		}
+
+		const users = [];
+		querySnapshot.forEach((doc) => {
+			const data = doc.data();
+			console.log(doc.id, data);
+			data["id"] = doc.id;
+			users.push(data);
+		});
+		users.sort((a, b) => b["points"] - a["points"]);
+		for (let i = 0; i < users.length; i++) {
+			const user = users[i];
+			const id = user["id"];
+			const name = user["name"];
+			const points = user["points"];
+			const timestamp = user["lastsip"];
+			if (id === userId) {
+				// For the logged in user, instead of adding to leaderboard, update dashboard
+				name1.textContent = name;
+				name2.textContent = name;
+				pointsDash.textContent = points;
+				lastSipDash.textContent = getTimestampString(timestamp);
+				if (lastSipDash.hasAttribute("interval")) {
+					clearInterval(parseInt(lastSipDash.getAttribute("interval"), 10));
+				}
+				lastSipDash.setAttribute("interval", setInterval(() => {
+					lastSipDash.textContent = getTimestampString(timestamp);
+				}, 1000));
 			}
-			lastSip.className = setInterval(() => {
-				lastSip.textContent = getTimestampString(timestamp);
-			}, 1000);
-			return;
-		}
-		let nameCell = document.getElementById(`user-name-${doc.id}`);
-		console.log(nameCell);
-		let pointsCell = document.getElementById(`user-points-${doc.id}`);
-		let lastSipCell = document.getElementById(`user-last-sip-${doc.id}`);
-		if (nameCell === null) {
+
 			const row = leaderboard.insertRow();
-			nameCell = row.insertCell();
-			nameCell.id = `user-name-${doc.id}`;
-			pointsCell = row.insertCell();
-			pointsCell.id = `user-points-${doc.id}`;
-			lastSipCell = row.insertCell();
-			lastSipCell.id = `user-last-sip-${doc.id}`;
-		}
-		nameCell.textContent = data["name"];
-		pointsCell.textContent = data["points"];
-		const timestamp = data["last-sip"];
-		lastSipCell.textContent = getTimestampString(timestamp);
-		if (lastSipCell.className !== "") {
-			clearInterval(parseInt(lastSipCell.className, 10));
-		}
-		lastSipCell.className = setInterval(() => {
+			const rankCell = row.insertCell();
+			rankCell.className = "rankcell";
+			const nameCell = row.insertCell();
+			nameCell.className = "namecell";
+			const pointsCell = row.insertCell();
+			pointsCell.className = "pointscell";
+			const lastSipCell = row.insertCell();
+			lastSipCell.className = "lastsipcell";
+
+			rankCell.textContent = i + 1;
+			if (id === userId) {
+				nameCell.innerHTML = `${name} <span class="marker-text">(you)</span>`;
+			} else {
+				nameCell.textContent = name;
+			}
+			pointsCell.textContent = points;
 			lastSipCell.textContent = getTimestampString(timestamp);
-		}, 1000);
+			lastSipCell.setAttribute("interval", setInterval(() => {
+				lastSipCell.textContent = getTimestampString(timestamp);
+			}, 1000));
+		}
+		dashboard.style.display = "block";
+		login.style.display = "none";
 	});
+}
+
+const loginInput = document.getElementById("login-input");
+const loginButton = document.getElementById("login-button");
+loginButton.addEventListener("click", () => {
+	userId = loginInput.value;
+	loadData();
+});
+loginInput.addEventListener("keydown", (event) => {
+	if (event.key !== "Enter") {
+		return;
+	}
+	userId = loginInput.value;
+	loadData();
 });

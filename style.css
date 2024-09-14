@@ -1,13 +1,22 @@
+:root {
+	--bg-color: #e8f0f8;
+	--section-color: #f0f8ff;
+	--dash-item-color: #f8ffff;
+	--titlebar-color: #d0e0f0;
+	--text-color: #303040;
+	--light-text-color: #8080a0;
+}
+
 * {
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
 	font-family: "Inter", sans-serif;
-	color: #303040;
+	color: var(--text-color);
 }
 
 html {
-	background: #e8f0f8;
+	background: var(--bg-color);
 	width: 100%;
 	height: 100%;
 }
@@ -26,7 +35,7 @@ body > * {
 
 #titlebar {
 	padding: 1em;
-	background: #d0e0f0;
+	background: var(--titlebar-color);
 	display: grid;
 	grid-template-columns: auto auto;
 }
@@ -51,11 +60,15 @@ body > * {
 	max-width: 40em;
 }
 
+#dashboard {
+	display: none;
+}
+
 section {
 	padding: 2em;
 	margin: 2em 0;
 	border-radius: 2em;
-	background: #f0f8ff;
+	background: var(--section-color);
 	display: flex;
 	flex-wrap: wrap;
 	gap: 2em;
@@ -63,16 +76,17 @@ section {
 
 section > div {
 	flex-grow: 1;
+	flex-basis: 0;
 	padding: 2em;
 	border-radius: 2em;
-	background: #f8ffff;
+	background: var(--dash-item-color);
 }
 
 section > h1, section > p {
 	flex-basis: 100%;
 }
 
-#points, #last-sip {
+#points, #lastsip {
 	font-size: 200%;
 }
 
@@ -81,9 +95,50 @@ table {
 }
 
 table > thead td {
-	color: #606080;
+	color: var(--light-text-color);
+}
+
+table tr > td:first-child {
+	color: var(--light-text-color);
+	text-align: center;
 }
 
 table td {
 	padding: 0.25em;
+}
+
+.rankcell {
+	width: 1.5em;
+}
+
+.pointscell {
+	width: 8em;
+}
+
+.lastsipcell {
+	width: 8em;
+}
+
+.marker-text {
+	color: var(--light-text-color);
+}
+
+#login section {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2em;
+}
+
+#login section > * {
+	display: inline;
+	flex-grow: 1;
+	margin: auto;
+}
+
+input, button {
+	font-family: inherit;
+	font-size: inherit;
+	padding: 0.5em 1em;
+	border: none;
+	border-radius: 2em;
 }

@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width,height=device-height">
-		<title>waterboo</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="style.css">
-	</head>
-	<body>
-		<h1>Hey Martin. Bozo.</h1>
-		<div id="dashboard">
-			<div id="points">You have <div id="points-number">0</div> points.</div>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,height=device-height">
+	<title>waterboo</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="titlebar">
+	<h1>waterboo</h1>
+	<p>Martin</h1>
+</div>
+<div id="main">
+<div id="container">
+	<h1>Hey Martin. Bozo.</h1>
+	<section>
+		<h2>Your stats</h2>
+		<p>Here's how terrible you're doing:</p>
+		<div>Points<div id="points" class="content">0</div></div>
+		<div>Last sip<div id="last-sip" class="content">0 sec ago</div></div>
+	</section>
+	<section>
+		<h2>Leaderboard</h2>
+		<p>Look at all these people who are more hydrated than you:</p>
+		<div>
+			<table id="leadboard">
+				<thead>
+					<tr>
+						<td>Name</td>
+						<td>Points</td>
+						<td>Last sip</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Martin</td>
+						<td>0</td>
+						<td>0 mins ago</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<script type="module" src="script.js"></script>
-	</body>
+	</section>
+	<script type="module" src="script.js"></script>
+</div>
+</div>
+</body>
 </html>

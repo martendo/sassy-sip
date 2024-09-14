@@ -49,7 +49,7 @@ async function loadData() {
 	const userSnap = await getDoc(userRef);
 	if (!userSnap.exists()) {
 		await setDoc(userRef, {
-			name: userId[0].toUpperCase() + userId.slice(1),
+			name: userId,
 			points: 0,
 			lastsip: null,
 		});

@@ -5,6 +5,8 @@ import { getFirestore, collection, getDocs, onSnapshot, doc, getDoc, setDoc } fr
 
 let userId = "martin";
 
+const nameSuffixes = [". Bozo", ". Doofus"];
+
 const dashboard = document.getElementById("dashboard");
 const login = document.getElementById("login");
 
@@ -75,7 +77,7 @@ async function loadData() {
 			const timestamp = user["lastsip"];
 			if (id === userId) {
 				// For the logged in user, instead of adding to leaderboard, update dashboard
-				name1.textContent = name;
+				name1.textContent = name + nameSuffixes[Math.floor(Math.random() * nameSuffixes.length)];
 				name2.textContent = name;
 				pointsDash.textContent = points;
 				lastSipDash.textContent = getTimestampString(timestamp);

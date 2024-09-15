@@ -37,7 +37,7 @@
 
 @keyframes colorChange {
 	0% {
-		--bg-anim-color: #6060f020;
+		--bg-anim-color: #f0f0ff20;
 		--bg-anim-pos1: 0%;
 		--bg-anim-pos2: 100%;
 	}
@@ -87,8 +87,8 @@ body > * {
 	overflow-y: auto;
 	animation: colorChange 5s infinite alternate;
 	background: linear-gradient(transparent, var(--bg-anim-color)),
-radial-gradient(ellipse at var(--bg-anim-pos2) bottom, var(--bg-color3), transparent),
-radial-gradient(ellipse at var(--bg-anim-pos1) top, var(--bg-color1), var(--bg-color2) 80%);
+		radial-gradient(ellipse at var(--bg-anim-pos2) bottom, var(--bg-color3), transparent),
+		radial-gradient(ellipse at var(--bg-anim-pos1) top, var(--bg-color1), var(--bg-color2) 80%);
 }
 
 #container {

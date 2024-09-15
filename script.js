@@ -64,7 +64,6 @@ async function loadData() {
 		const users = [];
 		querySnapshot.forEach((doc) => {
 			const data = doc.data();
-			console.log(doc.id, data);
 			data["id"] = doc.id;
 			users.push(data);
 		});

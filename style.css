@@ -1,8 +1,10 @@
 :root {
-	--bg-color: #e8f0f8;
+	--bg-color1: #e8f0f8;
+	--bg-color2: #b0c0e0;
+	--bg-color3: #8090c080;
 	--section-color: #f0f8ff;
 	--dash-item-color: #f8ffff;
-	--titlebar-color: #d0e0f0;
+	--titlebar-color: #90a0d0;
 	--text-color: #303040;
 	--light-text-color: #8080a0;
 }
@@ -15,8 +17,38 @@
 	color: var(--text-color);
 }
 
+@property --bg-anim-color {
+	syntax: "<color>";
+	inherits: false;
+	initial-value: #0000;
+}
+
+@property --bg-anim-pos1 {
+	syntax: "<percentage>";
+	inherits: false;
+	initial-value: 0%;
+}
+
+@property --bg-anim-pos2 {
+	syntax: "<percentage>";
+	inherits: false;
+	initial-value: 0%;
+}
+
+@keyframes colorChange {
+	0% {
+		--bg-anim-color: #6060f020;
+		--bg-anim-pos1: 0%;
+		--bg-anim-pos2: 100%;
+	}
+	100% {
+		--bg-anim-color: #40209060;
+		--bg-anim-pos1: 100%;
+		--bg-anim-pos2: 30%;
+	}
+}
+
 html {
-	background: var(--bg-color);
 	width: 100%;
 	height: 100%;
 }
@@ -53,6 +85,10 @@ body > * {
 #main {
 	padding: 2em;
 	overflow-y: auto;
+	animation: colorChange 5s infinite alternate;
+	background: linear-gradient(transparent, var(--bg-anim-color)),
+radial-gradient(ellipse at var(--bg-anim-pos2) bottom, var(--bg-color3), transparent),
+radial-gradient(ellipse at var(--bg-anim-pos1) top, var(--bg-color1), var(--bg-color2) 80%);
 }
 
 #container {
@@ -139,6 +175,6 @@ input, button {
 	font-family: inherit;
 	font-size: inherit;
 	padding: 0.5em 1em;
-	border: none;
+	border: 1px solid var(--titlebar-color);
 	border-radius: 2em;
 }
